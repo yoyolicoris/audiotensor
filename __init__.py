@@ -1,1 +1,1 @@
-from .audiotensor import AudioTensor
+from .audiotensor import AudioTensor, interpolation_mode

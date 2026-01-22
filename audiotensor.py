@@ -6,15 +6,47 @@ from torch import Tensor
 from typing import Union, Iterable
 from functools import reduce
 from math import gcd
+from contextvars import ContextVar
+from contextlib import contextmanager
+from philtorch.lti import cubic_spline
+
+INTERPOLATION_MODES: Iterable[str] = ["linear", "nearest", "cubic"]
+
+interpolation_mode_var: ContextVar[str] = ContextVar(
+    "interpolation_mode", default="linear"
+)
 
 
-def linear_upsample(x: Tensor, hop_length: int) -> Tensor:
-    return F.interpolate(
-        x.reshape(-1, 1, x.size(-1)),
-        (x.size(-1) - 1) * hop_length + 1,
-        mode="linear",
-        align_corners=True,
-    ).view(*x.shape[:-1], -1)
+@contextmanager
+def interpolation_mode(mode: str):
+    assert mode in INTERPOLATION_MODES, f"mode must be one of {INTERPOLATION_MODES}"
+    token = interpolation_mode_var.set(mode)
+    try:
+        yield
+    finally:
+        interpolation_mode_var.reset(token)
+
+
+def upsample(x: Tensor, hop_length: int) -> Tensor:
+    mode = interpolation_mode_var.get()
+    match mode:
+        case "nearest":
+            return F.interpolate(
+                x.reshape(-1, 1, x.size(-1)),
+                scale_factor=hop_length,
+                mode="nearest",
+            ).view(*x.shape[:-1], -1)[..., hop_length // 2 :]
+        case "linear":
+            return F.interpolate(
+                x.reshape(-1, 1, x.size(-1)),
+                (x.size(-1) - 1) * hop_length + 1,
+                mode="linear",
+                align_corners=True,
+            ).view(*x.shape[:-1], -1)
+        case "cubic":
+            return cubic_spline(x.flatten(0, -2), hop_length).view(*x.shape[:-1], -1)
+        case _:
+            raise ValueError(f"Unknown interpolation mode: {mode}")
 
 
 def check_hop_length(func):
@@ -88,7 +120,7 @@ class AudioTensor(Tensor):
         # swap the time dimension to the last
         if self.ndim > 2:
             self_copy = self_copy.transpose(1, -1)
-        expand_self_copy = linear_upsample(self_copy, factor)
+        expand_self_copy = upsample(self_copy, factor)
 
         # swap the time dimension back
         if self.ndim > 2:
