@@ -1,0 +1,56 @@
+# Jobs: lint (ruff check + format check), test (pytest with a 100% coverage
+# gate across OS x Python), build (sdist + wheel, smoke-tested, uploaded).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    name: lint and format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: prefix-dev/setup-pixi@v0.10.2
+        with:
+          pixi-version: latest
+          # fail if pixi.lock is out of sync with pixi.toml
+          locked: true
+      - run: pixi run lint
+      - run: pixi run format-check
+
+  test:
+    name: test (${{ matrix.os }}, ${{ matrix.env }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        env: [py311, py312, py313]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: prefix-dev/setup-pixi@v0.10.2
+        with:
+          pixi-version: latest
+          environments: ${{ matrix.env }}
+          locked: true
+      - run: pixi run -e ${{ matrix.env }} test
+
+  build:
+    name: build sdist and wheel
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: prefix-dev/setup-pixi@v0.10.2
+        with:
+          pixi-version: latest
+          locked: true
+      - run: pixi run build
+      - name: install the wheel and run an end-to-end check
+        run: pixi run smoke
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/

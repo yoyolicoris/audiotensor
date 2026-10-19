@@ -6,3 +6,4 @@ dist/
 .pixi/
 .vscode/
 .coverage
+coverage.xml

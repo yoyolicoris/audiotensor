@@ -5,16 +5,45 @@ channels = ["conda-forge"]
 platforms = ["linux-64", "osx-arm64"]
 
 [dependencies]
-python = ">=3.10,<3.14"
+python = ">=3.11,<3.14"
+pip = "*"
 numpy = "*"
 pytorch-cpu = ">=2.14,<3"
-pytest = "*"
-pytest-cov = "*"
-ruff = "*"
 
 [pypi-dependencies]
 audiotensor = { path = ".", editable = true }
 
+# Split from `dev` so the per-Python environments below carry only the test
+# runner, not the tooling.
+[feature.test.dependencies]
+pytest = "*"
+pytest-cov = "*"
+
+[feature.dev.dependencies]
+ruff = "*"
+python-build = "*"
+
+# One feature per supported interpreter, so CI can run the suite across the
+# whole `requires-python` range instead of whatever the solver happens to pick.
+[feature.py311.dependencies]
+python = "3.11.*"
+
+[feature.py312.dependencies]
+python = "3.12.*"
+
+[feature.py313.dependencies]
+python = "3.13.*"
+
+[environments]
+default = ["py313", "test", "dev"]
+py311 = ["py311", "test"]
+py312 = ["py312", "test"]
+py313 = ["py313", "test"]
+
 [tasks]
-test = "pytest"
-lint = "ruff check . && ruff format --check ."
+test = { cmd = "pytest -v --cov --cov-branch --cov-report=term-missing --cov-report=xml", description = "Run the test suite, enforce full coverage, and write coverage.xml" }
+lint = { cmd = "ruff check src tests scripts", description = "Lint with ruff" }
+format = { cmd = "ruff format src tests scripts", description = "Format with ruff" }
+format-check = { cmd = "ruff format --check src tests scripts", description = "Fail if any file needs reformatting" }
+build = { cmd = "python -m build", description = "Build sdist and wheel" }
+smoke = { cmd = "python scripts/smoke_wheel.py", description = "Install the built wheel into a temp dir and check it imports and works" }
