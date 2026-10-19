@@ -13,10 +13,18 @@ macos = "14.0"
 python = ">=3.11,<3.14"
 pip = "*"
 numpy = "*"
-pytorch-cpu = ">=2.14,<3"
 
 [pypi-dependencies]
 audiotensor = { path = ".", editable = true }
+
+# torch comes from conda-forge on Linux but from PyPI on macOS: philtorch's
+# macOS wheel is linked against PyPI torch's bundled libomp (install name
+# /opt/llvm-openmp/lib/libomp.dylib), which conda-forge's pytorch-cpu lacks.
+[target.linux-64.dependencies]
+pytorch-cpu = ">=2.14,<3"
+
+[target.osx-arm64.pypi-dependencies]
+torch = "==2.14.*"
 
 # Split from `dev` so the per-Python environments below carry only the test
 # runner, not the tooling.
