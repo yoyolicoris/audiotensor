@@ -4,6 +4,11 @@ authors = ["Chin-Yun Yu <chin-yun.yu@qmul.ac.uk>"]
 channels = ["conda-forge"]
 platforms = ["linux-64", "osx-arm64"]
 
+# philtorch ships macOS wheels tagged macosx_14_0_arm64; the default minimum is
+# older, so without this pixi rejects them and tries to build from the sdist.
+[system-requirements]
+macos = "14.0"
+
 [dependencies]
 python = ">=3.11,<3.14"
 pip = "*"

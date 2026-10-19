@@ -6,10 +6,11 @@ platforms:
   - __linux=4.18
   - __glibc=2.28
   - __archspec=0=x86_64
-- name: osx-arm64
+- name: osx-arm64-macos-14-0
+  subdir: osx-arm64
   virtual-packages:
+  - __osx=14.0
   - __unix=0=0
-  - __osx=13.0
   - __archspec=0=m1
 environments:
   default:
@@ -100,7 +101,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-4.1.1-pyh5ded981_0.conda
       - pypi: ./
       - pypi: https://files.pythonhosted.org/packages/77/4e/7b1ea9f4073fe4940e0177fe5b57a9d132d93cdaaadfae124335f789c0f4/philtorch-0.7.0-cp313-cp313-manylinux_2_28_x86_64.whl
-      osx-arm64:
+      osx-arm64-macos-14-0:
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.10.18-hbd8a1cb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.6-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/cpython-3.13.16-py313hd8ed1ab_102.conda
@@ -176,7 +177,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/sleef-3.9.0-hb028509_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/tk-8.6.13-hbeba79b_4.conda
       - pypi: ./
-      - pypi: https://files.pythonhosted.org/packages/af/50/07a5bb18af5f11739da0057fe0aee60e2756c44a63136bfc53536e5ebd73/philtorch-0.7.0.tar.gz
+      - pypi: https://files.pythonhosted.org/packages/40/76/92f24094131b37774e0582af6bc0a1075e08318bd8fd69332cd1af480c6a/philtorch-0.7.0-cp313-cp313-macosx_14_0_arm64.whl
   py311:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
@@ -262,7 +263,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/wheel-0.48.0-pyhd8ed1ab_0.conda
       - pypi: ./
       - pypi: https://files.pythonhosted.org/packages/b7/4b/45407888c6ea6a82723c2c098c3f181a8acf19703651e996a6291f204b68/philtorch-0.7.0-cp311-cp311-manylinux_2_28_x86_64.whl
-      osx-arm64:
+      osx-arm64-macos-14-0:
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.10.18-hbd8a1cb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.6-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/cpython-3.11.17-py311hd8ed1ab_2.conda
@@ -333,7 +334,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/sleef-3.9.0-hb028509_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/tk-8.6.13-hbeba79b_4.conda
       - pypi: ./
-      - pypi: https://files.pythonhosted.org/packages/af/50/07a5bb18af5f11739da0057fe0aee60e2756c44a63136bfc53536e5ebd73/philtorch-0.7.0.tar.gz
+      - pypi: https://files.pythonhosted.org/packages/7f/64/f1100e580dc7f7ab22eb4bdc27dd9b60979ac175200990f5f8ebb111ac25/philtorch-0.7.0-cp311-cp311-macosx_14_0_arm64.whl
   py312:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
@@ -419,7 +420,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/wheel-0.48.0-pyhd8ed1ab_0.conda
       - pypi: ./
       - pypi: https://files.pythonhosted.org/packages/f3/d2/61fd8223212367d8a90b3812e1cfcc5489f24f9e9796f3518037b842a012/philtorch-0.7.0-cp312-cp312-manylinux_2_28_x86_64.whl
-      osx-arm64:
+      osx-arm64-macos-14-0:
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.10.18-hbd8a1cb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.6-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/cpython-3.12.15-py312hd8ed1ab_2.conda
@@ -490,7 +491,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/sleef-3.9.0-hb028509_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/tk-8.6.13-hbeba79b_4.conda
       - pypi: ./
-      - pypi: https://files.pythonhosted.org/packages/af/50/07a5bb18af5f11739da0057fe0aee60e2756c44a63136bfc53536e5ebd73/philtorch-0.7.0.tar.gz
+      - pypi: https://files.pythonhosted.org/packages/e6/a1/d4822b50de49a752cdce0c6d2d99e4da78004224770614a3fd859d5cc435/philtorch-0.7.0-cp312-cp312-macosx_14_0_arm64.whl
   py313:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
@@ -574,7 +575,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2026c-h151e31d_0.conda
       - pypi: ./
       - pypi: https://files.pythonhosted.org/packages/77/4e/7b1ea9f4073fe4940e0177fe5b57a9d132d93cdaaadfae124335f789c0f4/philtorch-0.7.0-cp313-cp313-manylinux_2_28_x86_64.whl
-      osx-arm64:
+      osx-arm64-macos-14-0:
       - conda: https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.10.18-hbd8a1cb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/colorama-0.4.6-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/cpython-3.13.16-py313hd8ed1ab_102.conda
@@ -645,7 +646,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/sleef-3.9.0-hb028509_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/tk-8.6.13-hbeba79b_4.conda
       - pypi: ./
-      - pypi: https://files.pythonhosted.org/packages/af/50/07a5bb18af5f11739da0057fe0aee60e2756c44a63136bfc53536e5ebd73/philtorch-0.7.0.tar.gz
+      - pypi: https://files.pythonhosted.org/packages/40/76/92f24094131b37774e0582af6bc0a1075e08318bd8fd69332cd1af480c6a/philtorch-0.7.0-cp313-cp313-macosx_14_0_arm64.whl
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-8_kmp_llvm.conda
   build_number: 8
@@ -3421,6 +3422,17 @@ packages:
   - numpy
   - philtorch>=0.7.0
   requires_python: '>=3.11'
+- pypi: https://files.pythonhosted.org/packages/40/76/92f24094131b37774e0582af6bc0a1075e08318bd8fd69332cd1af480c6a/philtorch-0.7.0-cp313-cp313-macosx_14_0_arm64.whl
+  name: philtorch
+  version: 0.7.0
+  sha256: 09cca378b0e90ba8e8094dae45624b51d767aa3fc2a7a0d81ace4eebc252c507
+  requires_dist:
+  - torch==2.14.*
+  - pytest>=6.0 ; extra == 'dev'
+  - scipy ; extra == 'dev'
+  - numpy ; extra == 'dev'
+  - pytest-cov ; extra == 'dev'
+  requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/77/4e/7b1ea9f4073fe4940e0177fe5b57a9d132d93cdaaadfae124335f789c0f4/philtorch-0.7.0-cp313-cp313-manylinux_2_28_x86_64.whl
   name: philtorch
   version: 0.7.0
@@ -3432,12 +3444,12 @@ packages:
   - numpy ; extra == 'dev'
   - pytest-cov ; extra == 'dev'
   requires_python: '>=3.10'
-- pypi: https://files.pythonhosted.org/packages/af/50/07a5bb18af5f11739da0057fe0aee60e2756c44a63136bfc53536e5ebd73/philtorch-0.7.0.tar.gz
+- pypi: https://files.pythonhosted.org/packages/7f/64/f1100e580dc7f7ab22eb4bdc27dd9b60979ac175200990f5f8ebb111ac25/philtorch-0.7.0-cp311-cp311-macosx_14_0_arm64.whl
   name: philtorch
   version: 0.7.0
-  sha256: 4af42b1148aac6f6d1666b85a44940f3d482a3f1afd7b0b765f81a76adb3313f
+  sha256: 9d3a861b22f924a8a0ad17fd0c8e742ecfe0cff304e480b41f4f43d313d1ab66
   requires_dist:
-  - torch>=2.4.0
+  - torch==2.14.*
   - pytest>=6.0 ; extra == 'dev'
   - scipy ; extra == 'dev'
   - numpy ; extra == 'dev'
@@ -3447,6 +3459,17 @@ packages:
   name: philtorch
   version: 0.7.0
   sha256: b653824f2a1dff7c4d903e62b30d054d5da76505f9c6f0d8770eb94436f7e7be
+  requires_dist:
+  - torch==2.14.*
+  - pytest>=6.0 ; extra == 'dev'
+  - scipy ; extra == 'dev'
+  - numpy ; extra == 'dev'
+  - pytest-cov ; extra == 'dev'
+  requires_python: '>=3.10'
+- pypi: https://files.pythonhosted.org/packages/e6/a1/d4822b50de49a752cdce0c6d2d99e4da78004224770614a3fd859d5cc435/philtorch-0.7.0-cp312-cp312-macosx_14_0_arm64.whl
+  name: philtorch
+  version: 0.7.0
+  sha256: e80719431449b7b18d0e0f991e73369f4879e0e3ab765d898a35d3b782c82e86
   requires_dist:
   - torch==2.14.*
   - pytest>=6.0 ; extra == 'dev'
