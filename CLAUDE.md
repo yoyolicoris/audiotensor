@@ -15,7 +15,7 @@ All via pixi (tasks in [pixi.toml](pixi.toml)):
 - `pixi run lint` / `pixi run format` / `pixi run format-check` - ruff over `src tests scripts`
 - `pixi run build` - sdist + wheel into `dist/`; `pixi run smoke` installs the newest wheel with `--no-deps --target` into a temp dir and runs an end-to-end check against it
 
-CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): lint + format-check, tests on ubuntu/macos x py311-py313, build + smoke + `dist` artifact. All setup-pixi steps use `locked: true`, so re-run `pixi lock` after editing `pixi.toml`.
+CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): lint + format-check, tests on ubuntu x py311-py313 (no macOS: philtorch's macOS wheel needs PyPI torch's libomp and aborts next to conda-forge's pytorch-cpu), build + smoke + `dist` artifact. All setup-pixi steps use `locked: true`, so re-run `pixi lock` after editing `pixi.toml`.
 
 IDE diagnostics about missing `torch`/`numpy`/`philtorch` are false alarms: the IDE uses the system Python, not the pixi env.
 
