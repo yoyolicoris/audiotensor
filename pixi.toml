@@ -1,0 +1,20 @@
+[workspace]
+name = "audiotensor"
+authors = ["Chin-Yun Yu <chin-yun.yu@qmul.ac.uk>"]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64"]
+
+[dependencies]
+python = ">=3.10,<3.14"
+numpy = "*"
+pytorch-cpu = ">=2.14,<3"
+pytest = "*"
+pytest-cov = "*"
+ruff = "*"
+
+[pypi-dependencies]
+audiotensor = { path = ".", editable = true }
+
+[tasks]
+test = "pytest"
+lint = "ruff check . && ruff format --check ."

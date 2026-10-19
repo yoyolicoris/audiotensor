@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "audiotensor"
+version = "0.1.0"
+description = "A torch.Tensor subclass that tracks the hop length of frame-based audio features."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Chin-Yun Yu", email = "chin-yun.yu@qmul.ac.uk" }]
+dependencies = ["torch", "numpy", "philtorch>=0.7.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py310"

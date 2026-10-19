@@ -1,1 +1,8 @@
 *.pyc
+__pycache__/
+*.egg-info/
+build/
+dist/
+.pixi/
+.vscode/
+.coverage
