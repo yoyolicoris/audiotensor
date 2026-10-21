@@ -16,7 +16,7 @@ jobs:
       - uses: prefix-dev/setup-pixi@v0.10.2
         with:
           pixi-version: latest
-          # fail if pixi.lock is out of sync with pixi.toml
+          # fail if pixi.lock is out of sync with pyproject.toml
           locked: true
       - run: pixi run lint
       - run: pixi run format-check

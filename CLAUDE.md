@@ -8,18 +8,18 @@ Tiny library: `AudioTensor`, a `torch.Tensor` subclass carrying a `hop_length` a
 
 ## Commands
 
-All via pixi (tasks in [pixi.toml](pixi.toml)):
+All via pixi (manifest is `[tool.pixi.*]` in [pyproject.toml](pyproject.toml); there is no `pixi.toml`):
 - `pixi install` - create/update env (default = py313 + test + dev)
 - `pixi run test` - pytest with `--cov --cov-branch`; fails below 100% coverage (`fail_under` in [pyproject.toml](pyproject.toml)); writes `coverage.xml`. Single test: `pixi run pytest tests/test_audiotensor.py::test_hop_length_propagates`
 - `pixi run -e py311 test` (also `py312`, `py313`) - suite on one interpreter; only the default env has the dev tools
 - `pixi run lint` / `pixi run format` / `pixi run format-check` - ruff over `src tests scripts`
 - `pixi run build` - sdist + wheel into `dist/`; `pixi run smoke` installs the newest wheel with `--no-deps --target` into a temp dir and runs an end-to-end check against it
 
-CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): lint + format-check, tests on ubuntu x py311-py313 (linux-64 only: philtorch's macOS wheel needs PyPI torch's libomp and aborts next to conda-forge's pytorch-cpu, so `osx-arm64` is not a pixi platform), build + smoke + `dist` artifact. All setup-pixi steps use `locked: true`, so re-run `pixi lock` after editing `pixi.toml`.
+CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): lint + format-check, tests on ubuntu x py311-py313 (linux-64 only: philtorch's macOS wheel needs PyPI torch's libomp and aborts next to conda-forge's pytorch-cpu, so `osx-arm64` is not a pixi platform), build + smoke + `dist` artifact. All setup-pixi steps use `locked: true`, so re-run `pixi lock` after editing the `[tool.pixi.*]` tables or `[project.dependencies]`.
 
 IDE diagnostics about missing `torch`/`numpy`/`philtorch` are false alarms: the IDE uses the system Python, not the pixi env.
 
-Dependencies: `torch` (CPU build from conda-forge), `numpy`, and `philtorch` (PyPI; imported for `philtorch.lti.cubic_spline`, used by the `"cubic"` interpolation mode; it pins `torch==2.14.*`). Needs Python ≥ 3.11 (`requires-python`; conda-forge has no `pytorch` 2.14 for 3.10).
+Dependencies (`[project.dependencies]`): `torch>=2.14,<3`, `numpy>=2`, `philtorch>=0.7.0` (imported for `philtorch.lti.cubic_spline`, used by the `"cubic"` interpolation mode; it pins `torch==2.14.*`). In pixi, torch and numpy come from conda-forge (`pytorch-cpu`, `numpy` in `[tool.pixi.dependencies]`, same version ranges; pixi maps them to the PyPI names) and only philtorch from PyPI: keep the two lists in sync. Python in pixi comes from `requires-python` plus the `py311`..`py313` features. Needs Python ≥ 3.11 (`requires-python`; conda-forge has no `pytorch` 2.14 for 3.10).
 
 ## Architecture
 
