@@ -2047,7 +2047,7 @@ packages:
   requires_dist:
   - numpy>=2
   - philtorch>=0.7.0
-  - torch>=2.14,<3
+  - torch>=2.4
   requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/77/4e/7b1ea9f4073fe4940e0177fe5b57a9d132d93cdaaadfae124335f789c0f4/philtorch-0.7.0-cp313-cp313-manylinux_2_28_x86_64.whl
   name: philtorch

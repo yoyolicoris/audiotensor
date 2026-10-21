@@ -25,8 +25,10 @@ classifiers = [
     "Topic :: Multimedia :: Sound/Audio :: Analysis",
     "Topic :: Scientific/Engineering",
 ]
-# Keep in sync with [tool.pixi.dependencies]: philtorch pins torch==2.14.*.
-dependencies = ["torch>=2.14,<3", "numpy>=2", "philtorch>=0.7.0"]
+# torch>=2.4 is audiotensor's own floor (torch.serialization.add_safe_globals).
+# Do not copy philtorch's torch pin here: its compiled wheels pin the torch
+# minor they were built for, and the resolver applies that through philtorch.
+dependencies = ["torch>=2.4", "numpy>=2", "philtorch>=0.7.0"]
 
 [project.urls]
 Homepage = "https://github.com/yoyolicoris/audiotensor"
@@ -71,6 +73,7 @@ platforms = ["linux-64"]
 # names, so only philtorch comes from PyPI. Python comes from requires-python
 # plus the per-interpreter features below.
 [tool.pixi.dependencies]
+# narrower than [project.dependencies]: philtorch 0.7 pins torch==2.14.*
 pytorch-cpu = ">=2.14,<3"
 numpy = ">=2"
 

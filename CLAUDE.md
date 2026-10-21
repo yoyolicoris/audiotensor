@@ -21,7 +21,7 @@ Release ([.github/workflows/release.yml](.github/workflows/release.yml)): pushin
 
 IDE diagnostics about missing `torch`/`numpy`/`philtorch` are false alarms: the IDE uses the system Python, not the pixi env.
 
-Dependencies (`[project.dependencies]`): `torch>=2.14,<3`, `numpy>=2`, `philtorch>=0.7.0` (imported for `philtorch.lti.cubic_spline`, used by the `"cubic"` interpolation mode; it pins `torch==2.14.*`). In pixi, torch and numpy come from conda-forge (`pytorch-cpu`, `numpy` in `[tool.pixi.dependencies]`, same version ranges; pixi maps them to the PyPI names) and only philtorch from PyPI: keep the two lists in sync. Python in pixi comes from `requires-python` plus the `py311`..`py313` features. Needs Python ≥ 3.11 (`requires-python`; conda-forge has no `pytorch` 2.14 for 3.10).
+Dependencies (`[project.dependencies]`): `torch>=2.4` (audiotensor's own floor: `add_safe_globals`), `numpy>=2`, `philtorch>=0.7.0` (imported for `philtorch.lti.cubic_spline`, used by the `"cubic"` interpolation mode). philtorch's compiled wheels pin `torch==2.14.*`; that pin reaches users through philtorch's metadata and is deliberately not copied into ours. In pixi, torch and numpy come from conda-forge (`pytorch-cpu`, `numpy` in `[tool.pixi.dependencies]`; pixi maps them to the PyPI names) and only philtorch from PyPI; `pytorch-cpu` there is `>=2.14,<3` because of philtorch's pin. Python in pixi comes from `requires-python` plus the `py311`..`py313` features. Needs Python ≥ 3.11 (`requires-python`; conda-forge has no `pytorch` 2.14 for 3.10).
 
 ## Architecture
 
