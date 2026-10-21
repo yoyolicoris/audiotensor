@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## State of the repo
 
-Tiny library: `AudioTensor`, a `torch.Tensor` subclass carrying a `hop_length` attribute. Previously a git submodule of another project; now a proper package (setuptools, `src/` layout, version in [pyproject.toml](pyproject.toml)). Source lives in [src/audiotensor/](src/audiotensor/); the package is installed editable into the pixi env.
+Tiny library: `AudioTensor`, a `torch.Tensor` subclass carrying a `hop_length` attribute. Previously a git submodule of another project; now a proper package (hatchling + hatch-vcs, `src/` layout, config in [pyproject.toml](pyproject.toml)). The version is not stored in the repo: it comes from git tags (`v0.1.0` -> `0.1.0`); without tags builds get a `0.1.devN+g<hash>` placeholder. Source lives in [src/audiotensor/](src/audiotensor/); the package is installed editable into the pixi env.
 
 ## Commands
 
@@ -13,9 +13,11 @@ All via pixi (manifest is `[tool.pixi.*]` in [pyproject.toml](pyproject.toml); t
 - `pixi run test` - pytest with `--cov --cov-branch`; fails below 100% coverage (`fail_under` in [pyproject.toml](pyproject.toml)); writes `coverage.xml`. Single test: `pixi run pytest tests/test_audiotensor.py::test_hop_length_propagates`
 - `pixi run -e py311 test` (also `py312`, `py313`) - suite on one interpreter; only the default env has the dev tools
 - `pixi run lint` / `pixi run format` / `pixi run format-check` - ruff over `src tests scripts`
-- `pixi run build` - sdist + wheel into `dist/`; `pixi run smoke` installs the newest wheel with `--no-deps --target` into a temp dir and runs an end-to-end check against it
+- `pixi run build` - sdist + wheel into `dist/`; `pixi run smoke` creates a throwaway venv, installs the newest wheel with its dependencies (CPU torch via the pytorch index) and checks the import, `__version__` (must match the wheel filename, and the tag in a tag build) and an end-to-end example
 
-CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): lint + format-check, tests on ubuntu x py311-py313 (linux-64 only: philtorch's macOS wheel needs PyPI torch's libomp and aborts next to conda-forge's pytorch-cpu, so `osx-arm64` is not a pixi platform), build + smoke + `dist` artifact. All setup-pixi steps use `locked: true`, so re-run `pixi lock` after editing the `[tool.pixi.*]` tables or `[project.dependencies]`.
+CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): lint + format-check, tests on ubuntu x py311-py313 (linux-64 only: philtorch's macOS wheel needs PyPI torch's libomp and aborts next to conda-forge's pytorch-cpu, so `osx-arm64` is not a pixi platform), build + smoke + `dist` artifact. All checkouts use `fetch-depth: 0` (hatch-vcs needs tags) and all setup-pixi steps use `locked: true`, so re-run `pixi lock` after editing the `[tool.pixi.*]` tables or `[project.dependencies]`.
+
+Release ([.github/workflows/release.yml](.github/workflows/release.yml)): pushing a `v*` tag runs lint, tests, build, smoke, then publishes to PyPI via trusted publishing (environment `pypi`, no token). Before the first tag (`v0.1.0`) a pending trusted publisher must be registered on PyPI (see the workflow header).
 
 IDE diagnostics about missing `torch`/`numpy`/`philtorch` are false alarms: the IDE uses the system Python, not the pixi env.
 
@@ -47,7 +49,7 @@ Function names are only matched for in-place detection (`_is_inplace`).
 - `copy.deepcopy` uses an own `__deepcopy__` (leaf-only): torch's default fails for subclasses because `new_empty` returns a plain Tensor under `DisableTorchFunctionSubclass` (reproducible with a bare `Tensor` subclass on torch 2.14). It deep-copies `self.detach()` as a plain tensor (torch handles storage/memo/conj/neg), re-wraps it with `_make_subclass`, then copies `.grad` and `__dict__`. `AudioTensor` is registered with `torch.serialization.add_safe_globals` at import so `torch.load` works with `weights_only=True`.
 - In-place ops: the destination is never resampled. Mixed hops work only when the destination has the finest hop (operands are resampled/truncated to it); otherwise `ValueError`. The destination object itself is returned (`r is x`).
 - Time-axis contract: `a.T`, `a.transpose(0, 1)`, `a.reshape(...)` etc. keep `hop_length` (pinned by `test_time_axis_contract_ops_keep_hop`). Do not add invalidation for them without a decision.
-- Aliasing: no-op resampling/truncation returns `self`, `truncate` returns a view, `increase_hop_length`/`reduce_hop_length` return fresh storage (pinned by `test_aliasing_contract`, documented in README).
+- Aliasing: no-op resampling/truncation returns `self`, `truncate` returns a view, `increase_hop_length`/`reduce_hop_length` return fresh storage (pinned by `test_aliasing_contract`; intentionally not in the trimmed README).
 - `post_process` never touches the hop of an object that existed before the call (`inputs` set): in-place ops and `contiguous()`-like ops return the input untouched. Only `_wrap` (fresh tensors) and `__new__` assign `hop_length`.
 - `upsample(x, hop_length, mode)` is pure; the `interpolation_mode_var` ContextVar is read only in `reduce_hop_length` and in `__torch_function__` (only when several AudioTensors must be resampled/aligned) and threaded down as `mode`.
 - The `_reconcile_*` helpers are pure: they return `({index in flatten: replacement}, output_hop)`.

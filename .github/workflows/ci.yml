@@ -7,15 +7,20 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: lint and format
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: prefix-dev/setup-pixi@v0.10.2
         with:
-          pixi-version: latest
+          # hatch-vcs derives the version from git tags
+          fetch-depth: 0
+      - uses: prefix-dev/setup-pixi@v0.11.2
+        with:
           # fail if pixi.lock is out of sync with pyproject.toml
           locked: true
       - run: pixi run lint
@@ -32,9 +37,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: prefix-dev/setup-pixi@v0.10.2
         with:
-          pixi-version: latest
+          # hatch-vcs derives the version from git tags
+          fetch-depth: 0
+      - uses: prefix-dev/setup-pixi@v0.11.2
+        with:
           environments: ${{ matrix.env }}
           locked: true
       - run: pixi run -e ${{ matrix.env }} test
@@ -44,12 +51,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: prefix-dev/setup-pixi@v0.10.2
         with:
-          pixi-version: latest
+          # hatch-vcs derives the version from git tags
+          fetch-depth: 0
+      - uses: prefix-dev/setup-pixi@v0.11.2
+        with:
           locked: true
       - run: pixi run build
-      - name: install the wheel and run an end-to-end check
+      - name: install the wheel in a clean venv and run an end-to-end check
         run: pixi run smoke
       - uses: actions/upload-artifact@v7
         with:

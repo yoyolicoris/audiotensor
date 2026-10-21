@@ -74,7 +74,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/networkx-3.7-pyhc364b38_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/packaging-26.3-pyhc364b38_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pathspec-1.1.1-pyhd8ed1ab_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/noarch/pip-26.2.1-pyh145f28c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pluggy-1.7.0-pyh5ded981_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pybind11-3.0.4-pyh293190f_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pybind11-abi-11-hc364b38_1.conda
@@ -1763,18 +1762,6 @@ packages:
   run_exports: {}
   size: 56559
   timestamp: 1777271601895
-- conda: https://conda.anaconda.org/conda-forge/noarch/pip-26.2.1-pyh145f28c_0.conda
-  sha256: 0f7021cfb3ff454c91a5e28e1f5060906a52c6d1cde3f879a7d03ac33c28b1c3
-  md5: 573cb3ed111004230ed3de650653cd4d
-  depends:
-  - python >=3.13.0a0
-  license: MIT
-  license_family: MIT
-  purls:
-  - pkg:pypi/pip?source=hash-mapping
-  run_exports: {}
-  size: 1198163
-  timestamp: 1785914482439
 - conda: https://conda.anaconda.org/conda-forge/noarch/pluggy-1.7.0-pyh5ded981_0.conda
   sha256: 34c40106bc3172b3a47656e84837e13a5d4829d413d65f30fb214e7568a09cea
   md5: 50c6bcd41b7ceaaeeea8852e3198663e
@@ -2058,9 +2045,9 @@ packages:
 - pypi: ./
   name: audiotensor
   requires_dist:
-  - torch>=2.14,<3
   - numpy>=2
   - philtorch>=0.7.0
+  - torch>=2.14,<3
   requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/77/4e/7b1ea9f4073fe4940e0177fe5b57a9d132d93cdaaadfae124335f789c0f4/philtorch-0.7.0-cp313-cp313-manylinux_2_28_x86_64.whl
   name: philtorch
